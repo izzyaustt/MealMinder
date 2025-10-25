@@ -1,7 +1,15 @@
 import express from "express";
 import cors from "cors";
 import multer from "multer";
+import { detectText } from "./vision.js";
+import admin from "firebase-admin";
+import dotenv from "dotenv"
+import path from "path"
 
+//config the .env file to get credentials
+dotenv.config();
+
+//setting up app
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -16,36 +24,64 @@ let fridgeItems = [
   { name: "Bananas", expiration: "2025-10-28" },
 ];
 
+//firebase admin sdk setup
+import serviceAccount from "./firebase-key.json" assert { type: "json" };
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount);
+});
+
+//middleware to verify firebase token :p
+async function verifyFirebaseToken(req, res, next){
+    const authHeader = reqheaders.authorization;
+    if(!authHeader) return res.status(401).send("Missing Auth header");
+
+    const token = authHeader.split(" ")[1];
+    try{
+        const decoded = await admin.auth().verifyIdToken(token);
+        req.user = decoded;
+        next();
+    }catch (e) {
+        console.error(e);
+        res.status(401).status("invalid token");
+    }
+}
+
 // test route
 app.get("/", (req, res) => {
   res.send("Backend running 🚀");
 });
 
 //ROUTESSS
-// upload route
-app.post("/upload", upload.single("receipt"), (req, res) => {
-  console.log("uploaded file:", req.file);
+// upload route adding ocr
+app.post("/upload", verifyFirebaseToken, upload.single("receipt"), async (req, res) => {
+    try{
+        const filePath = req.file.path;
 
-    // MOCK OCR: pretend we extracted these from receipt
-  const extractedItems = [
-    { name: "Cheese", expiration: "2025-11-01" },
-    { name: "Tomatoes", expiration: "2025-10-27" },
-  ];
+        //calling ocr 
+        const extractedLines = await detectText(filePath);
 
-   fridgeItems.push(...extractedItems);
+        //convert lines to items
+        const extractedItems = extractedLines.map(line => ({
+            name: line,
+            expiration: "2025-11-03",
+        }));
 
+        fridgeItems.push(...extractedItems);
 
-
-
-  res.json({ message: "File received!", file: req.file, extractedItems, fridgeItems, });
+        res.json({ message: "ocr complete", extractedItems, fridgeItems, });
+    }catch(err){
+    console.error(err);
+    res.status(500).json({error: "OCR failed", details: err.message,});
+    }
 });
 
-app.get("/mock-items", (req,res) => {
+app.get("/mock-items", verifyFirebaseToken, (req,res) => {
     res.json(fridgeItems);
 });
 
 //adding an item
-app.post("/add-item", (req,res) => {
+app.post("/add-item", verifyFirebaseToken, (req,res) => {
     const { name, expiration } =req.body;
     if(!name || !expiration){
         return res.status(400).json({error: "Name and expiration required!"});
@@ -56,7 +92,7 @@ app.post("/add-item", (req,res) => {
 });
 
 //deleting an item
-app.delete("/delete-item/:name", (req, res) => {
+app.delete("/delete-item/:name", verifyFirebaseToken, (req, res) => {
     const {name} = req.params;
     fridgeItems = fridgeItems.filter( item => item.name !== name);
     res.json({messgae: "Items deleted!", fridgeItems});
