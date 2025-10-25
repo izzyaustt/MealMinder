@@ -5,6 +5,7 @@ import { detectText } from "./vision.js";
 import admin from "firebase-admin";
 import dotenv from "dotenv"
 import path from "path"
+import serviceAccount from "./firebase-service-account.json" assert { type: "json" };
 
 //config the .env file to get credentials
 dotenv.config();
@@ -29,7 +30,6 @@ let fridgeItems = [
 ];
 
 //firebase admin sdk setup
-import serviceAccount from "./firebase-service-account.json" assert { type: "json" };
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
