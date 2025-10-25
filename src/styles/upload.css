@@ -1,0 +1,30 @@
+/* return (
+    <div className="file-upload">
+        <div className = "upload-container">
+          <h1>Upload Receipt Image</h1>
+          <p>For best results, ensure you are using a plain background and good lighting!</p>
+        <div className="upload-icon">
+            <img src={icon} alt=""></img>
+        </div>
+
+        <input
+            type="file"
+            className="file-input"
+            onChange={handleFileUpload}
+        />
+      </div> */
+
+.file-upload{
+
+}
+
+.upload-icon{
+    max-width: 100%; /* Image will scale down to fit container */
+     height: auto; /* Maintain aspect ratio */
+}
+
+.desc{
+    text-align: center;
+    align-items: center;
+}
+

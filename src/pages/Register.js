@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import "../Login.css";
+import '../styles/upload.css';
 import girl from '../images/girl1.png'
 
 function Register() {

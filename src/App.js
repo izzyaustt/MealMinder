@@ -1,8 +1,10 @@
-import './App.css';
+import './styles/Login.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Landing from './pages/Landing'
+import Fridge from './pages/Fridge'
+import Upload from './pages/Upload'
 
 
 function App() {
@@ -13,6 +15,8 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/myfridge" element={<Fridge />} />
+            <Route path="/upload" element={<Upload />} />
           </Routes>
       </div>
     </BrowserRouter>
