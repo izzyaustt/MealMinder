@@ -1,0 +1,39 @@
+.hamburger{
+    /* Example: Fix the icon to the top right */
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1001; /* Ensure it's above everything */
+}
+
+.sidebar-menu {
+    /* Fixed position to cover the screen */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px; /* Width of the menu */
+    height: 100%;
+    
+    background-color: #AACEA8; /* Dark background */
+    padding-top: 60px; /* Space below the header/icon */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Must be below the hamburger icon */
+
+    /* Layout for links */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style the individual Link components */
+.menu-link {
+    padding: 15px 20px;
+    text-decoration: none;
+    color: white;
+    font-size: 1.1em;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.2s;
+}
+
+.menu-link:hover {
+    background-color: #597C58;
+}
