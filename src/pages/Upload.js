@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import { useState } from 'react';
 import '../styles/upload.css';
@@ -60,6 +61,22 @@ function Upload () {
   return (
     <div className="file-upload">
       <Hamburger />
+=======
+import React from 'react';
+import '../styles/upload.css';
+import icon from '../images/upload.png'; 
+
+function Upload () {
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0] 
+    console.log(file)
+  }
+
+
+  return (
+    <div className="file-upload">
+>>>>>>> 90d7907e609d7c45cc8145a9582d971783e49bec
         <div className = "upload-container">
           <h1 className="header">Upload Receipt Image</h1>
           <p className="desc">For best results, ensure you are using a plain background and good lighting!</p>
@@ -71,6 +88,7 @@ function Upload () {
             type="file"
             className="file-input"
             onChange={handleFileUpload}
+<<<<<<< HEAD
             accept ="image/*"
             disabled={isLoading}
         />
@@ -93,3 +111,12 @@ function Upload () {
 
 
 export default Upload;
+=======
+        />
+      </div>
+    </div>
+  )
+
+}
+export default Upload
+>>>>>>> 90d7907e609d7c45cc8145a9582d971783e49bec

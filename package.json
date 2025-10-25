@@ -12,10 +12,13 @@
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^12.4.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "hamburger-react": "^2.5.2",
 =======
     "node-fetch": "^3.3.2",
 >>>>>>> acb3d05b793b56dd627ec55223975341f87291c1
+=======
+>>>>>>> 90d7907e609d7c45cc8145a9582d971783e49bec
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-dropzone": "^14.3.8",

@@ -29,11 +29,18 @@ let fridgeItems = [
 ];
 
 //firebase admin sdk setup
+<<<<<<< HEAD
 import serviceAccount from "./firebase-service-account.json" assert { type: "json" };
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     storageBucket: process.env.FIREBASE_BUCKET
+=======
+import serviceAccount from "./firebase-key.json" assert { type: "json" };
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+>>>>>>> 90d7907e609d7c45cc8145a9582d971783e49bec
 });
 
 //middleware to verify firebase token :p
@@ -59,6 +66,7 @@ app.get("/", (req, res) => {
 
 //ROUTESSS
 // upload route adding ocr
+<<<<<<< HEAD
 app.post("/upload", cors(corsOptions), /*verifyFirebaseToken,*/ upload.single("receipt"), async (req, res) => {
     try{
 
@@ -75,6 +83,23 @@ app.post("/upload", cors(corsOptions), /*verifyFirebaseToken,*/ upload.single("r
 
         fridgeItems.push(...extractedItems);
 
+=======
+app.post("/upload", verifyFirebaseToken, upload.single("receipt"), async (req, res) => {
+    try{
+        const filePath = req.file.path;
+
+        //calling ocr 
+        const extractedLines = await detectText(filePath);
+
+        //convert lines to items
+        const extractedItems = extractedLines.map(line => ({
+            name: line,
+            expiration: "2025-11-03",
+        }));
+
+        fridgeItems.push(...extractedItems);
+
+>>>>>>> 90d7907e609d7c45cc8145a9582d971783e49bec
         res.json({ message: "ocr complete", extractedItems, fridgeItems, });
     }catch(err){
     console.error(err);
@@ -82,12 +107,20 @@ app.post("/upload", cors(corsOptions), /*verifyFirebaseToken,*/ upload.single("r
     }
 });
 
+<<<<<<< HEAD
 app.get("/mock-items", /*verifyFirebaseToken*/ (req,res) => {
+=======
+app.get("/mock-items", verifyFirebaseToken, (req,res) => {
+>>>>>>> 90d7907e609d7c45cc8145a9582d971783e49bec
     res.json(fridgeItems);
 });
 
 //adding an item
+<<<<<<< HEAD
 app.post("/add-item", /*verifyFirebaseToken*/ (req,res) => {
+=======
+app.post("/add-item", verifyFirebaseToken, (req,res) => {
+>>>>>>> 90d7907e609d7c45cc8145a9582d971783e49bec
     const { name, expiration } =req.body;
     if(!name || !expiration){
         return res.status(400).json({error: "Name and expiration required!"});
@@ -98,7 +131,11 @@ app.post("/add-item", /*verifyFirebaseToken*/ (req,res) => {
 });
 
 //deleting an item
+<<<<<<< HEAD
 app.delete("/delete-item/:name", /*verifyFirebaseToken*/ (req, res) => {
+=======
+app.delete("/delete-item/:name", verifyFirebaseToken, (req, res) => {
+>>>>>>> 90d7907e609d7c45cc8145a9582d971783e49bec
     const {name} = req.params;
     fridgeItems = fridgeItems.filter( item => item.name !== name);
     res.json({messgae: "Items deleted!", fridgeItems});
