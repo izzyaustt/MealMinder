@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import box from '../images/box.png'; 
 import logo from '../images/mealminder.png';
-import '../App.css'
+import '../styles/Landing.css'
 
 function Landing() {
   return (
     <header className="App-header">
-      <img src={logo} alt="MealMinder" className="logo" />
+      <img src={logo} alt="MealMinder" className="landing-logo" />
       <p>Eliminate food waste</p>
       <img src={box} alt="box" className="boximg" />
       

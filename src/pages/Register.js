@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import '../styles/upload.css';
+import '../styles/Register.css';
 import girl from '../images/girl1.png'
 
 function Register() {
@@ -26,11 +26,12 @@ function Register() {
     };
 
     return (
-        <>
+        <div className="register-page">
+          <div className="register-container">
             <h2 className="header">Create Account</h2>
-            <img src={girl} alt="duck mascot" />
+            <img src={girl} alt="duck mascot" className="register-image" />
 
-            <form className="App" onSubmit={handleSubmit(onSubmit)}>
+            <form className="register-form" onSubmit={handleSubmit(onSubmit)}>
                 <input
                     className="input-box"
                     type="text"
@@ -55,12 +56,10 @@ function Register() {
                 />
                 {errors.password && <span style={{ color: "red" }}>*Password* is mandatory</span>}
 
-                <input type="submit" style={{ backgroundColor: "#AACEA8", 
-                        borderRadius: "15px",
-                        display: "block",
-                        margin: "0 auto" }} />
+                <input type="submit" className="submit-btn" value="Create account" />
             </form>
-        </>
+          </div>
+        </div>
     );
 }
 

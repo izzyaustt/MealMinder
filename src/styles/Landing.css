@@ -1,0 +1,213 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #FEF7EA;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #856B59;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated background gradient overlay */
+.App-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  /*background: radial-gradient(circle, rgba(170, 206, 168, 0.1) 0%, transparent 70%);*/
+  animation: rotateGradient 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotateGradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.title {
+  font-size: xx-large;
+  color: #856B59;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 15px;
+  width: 18vw;
+  min-width: 200px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /*box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);*/
+  z-index: 1;
+}
+
+.primary-button {
+  color: white;
+  background: linear-gradient(135deg, #AACEA8 0%, #8fb88d 100%);
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.secondary-button {
+  color: #856B59;
+  border: 2px solid #856B59;
+  background-color: transparent;
+  animation: fadeInUp 0.8s ease-out 0.7s both;
+}
+
+/* Shimmer effect for primary button */
+.primary-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.primary-button:hover::before {
+  left: 100%;
+}
+
+.primary-button:hover {
+  background: linear-gradient(135deg, #8fb88d 0%, #7da67b 100%);
+  transform: translateY(-5px);
+  /*box-shadow: 0 8px 25px rgba(170, 206, 168, 0.4);*/
+}
+
+.secondary-button:hover {
+  background-color: #e1cfb8;
+  transform: translateY(-5px);
+  /*box-shadow: 0 8px 25px rgba(133, 107, 89, 0.2);*/
+  border-color: #6d5647;
+}
+
+.primary-button:active,
+.secondary-button:active {
+  transform: translateY(-2px);
+  transition: all 0.1s;
+}
+
+.landing-logo {
+  min-width: 30vw;
+  max-width: 35vw;
+  display: block;
+  margin-top: -7vw;
+  /*filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));*/
+  animation: fadeInDown 0.8s ease-out, float 3s ease-in-out infinite;
+  animation-delay: 0s, 0.8s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.boximg {
+  min-width: 30vw;
+  /*filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.2));*/
+  animation: scaleIn 0.8s ease-out 0.3s both;
+  transition: transform 0.3s ease;
+}
+
+.boximg:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+p {
+  margin-top: -7vw;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+  position: relative;
+}
+
+/* Decorative elements */
+p::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #AACEA8, transparent);
+  border-radius: 2px;
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out 0.4s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
