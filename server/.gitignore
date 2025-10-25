@@ -2,3 +2,5 @@ node_modules/
 uploads/
 .env
 firebase-key.json
+ocr-mealminder.json
+server/ocr-mealminder.json
