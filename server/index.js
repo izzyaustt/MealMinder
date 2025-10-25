@@ -12,6 +12,10 @@ dotenv.config();
 //setting up app
 const app = express();
 app.use(cors());
+var corsOptions = {
+  origin: `${process.env.CORSORIGIN}`,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 app.use(express.json());
 
 // file uploads frrom multer
@@ -25,10 +29,11 @@ let fridgeItems = [
 ];
 
 //firebase admin sdk setup
-import serviceAccount from "./firebase-key.json" assert { type: "json" };
+import serviceAccount from "./firebase-service-account.json" assert { type: "json" };
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
+    storageBucket: process.env.FIREBASE_BUCKET
 });
 
 //middleware to verify firebase token :p
@@ -54,8 +59,9 @@ app.get("/", (req, res) => {
 
 //ROUTESSS
 // upload route adding ocr
-app.post("/upload", verifyFirebaseToken, upload.single("receipt"), async (req, res) => {
+app.post("/upload", cors(corsOptions), /*verifyFirebaseToken,*/ upload.single("receipt"), async (req, res) => {
     try{
+
         const filePath = req.file.path;
 
         //calling ocr 
@@ -76,12 +82,12 @@ app.post("/upload", verifyFirebaseToken, upload.single("receipt"), async (req, r
     }
 });
 
-app.get("/mock-items", verifyFirebaseToken, (req,res) => {
+app.get("/mock-items", /*verifyFirebaseToken*/ (req,res) => {
     res.json(fridgeItems);
 });
 
 //adding an item
-app.post("/add-item", verifyFirebaseToken, (req,res) => {
+app.post("/add-item", /*verifyFirebaseToken*/ (req,res) => {
     const { name, expiration } =req.body;
     if(!name || !expiration){
         return res.status(400).json({error: "Name and expiration required!"});
@@ -92,18 +98,12 @@ app.post("/add-item", verifyFirebaseToken, (req,res) => {
 });
 
 //deleting an item
-<<<<<<< HEAD
-app.delete("/delete-item/:name", verifyFirebaseToken, (req, res) => {
+app.delete("/delete-item/:name", /*verifyFirebaseToken*/ (req, res) => {
     const {name} = req.params;
     fridgeItems = fridgeItems.filter( item => item.name !== name);
-=======
-app.delete("/delete-item/:name", (req, res) => {
-    const {name} = req.params;
-    fridgeItems = fridgeItems.filtetr( item => item.name !== name);
->>>>>>> d33c3dc (add changes)
     res.json({messgae: "Items deleted!", fridgeItems});
 })
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

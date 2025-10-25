@@ -5,12 +5,12 @@ import path from "path";
 
 dotenv.config();
 
-storageBucket: process.env.FIREBASE_BUCKET
+const storageBucket = process.env.FIREBASE_BUCKET
 const serviceAccount = path.resolve("firebase-service-account.json");
-
+console.log(`storage bucket is ${storageBucket}`)
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: process.env.FIREBASE_BUCKET, 
+  storageBucket: storageBucket, 
 });
 
 const db = admin.firestore();
