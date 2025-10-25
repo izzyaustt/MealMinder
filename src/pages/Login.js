@@ -1,6 +1,6 @@
 import React from 'react';
 import girl from '../images/girl2.png'
-import '../Login.css';
+import '../styles/Login.css';
 import { useForm } from "react-hook-form";
 
 
