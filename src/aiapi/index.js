@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import fetch from "node-fetch";
+import expiryRouter from '../expiry/index.js';
 
 // Load .env relative to this file
 const __filename = fileURLToPath(import.meta.url);
@@ -129,6 +130,8 @@ Keep recipes simple and practical.`;
     res.status(500).json({ error: "Failed to generate recipes", details: error?.message || String(error) });
   }
 });
+
+app.use('/expiry', expiryRouter);
 
 // Start server
 const PORT = 5001;
