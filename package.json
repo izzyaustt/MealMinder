@@ -5,12 +5,17 @@
   "dependencies": {
     "@react-navigation/bottom-tabs": "^7.5.0",
     "@tailwindcss/vite": "^4.1.16",
+    "@google/generative-ai": "^0.24.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^12.4.0",
+<<<<<<< HEAD
     "hamburger-react": "^2.5.2",
+=======
+    "node-fetch": "^3.3.2",
+>>>>>>> acb3d05b793b56dd627ec55223975341f87291c1
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-dropzone": "^14.3.8",
