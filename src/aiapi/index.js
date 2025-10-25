@@ -64,6 +64,8 @@ app.post("/generate-recipes", async (req, res) => {
 - List of ingredients needed
 - Step-by-step instructions
 - Disclaimer: Try maximizing the items in the list but avoid creating odd recipes like banana and onion milkshake. If this happens, make one recipe for the onion stuff and one recipe for banana stuff. This is just an example.
+- Don't add any extra sentences in the beginning, only print out the 3 recipes with steps/ingredients. 
+- Still keep it very user friendly and nice to read/look at. 
 
 Keep recipes simple and practical.`;
 
