@@ -92,9 +92,15 @@ app.post("/add-item", verifyFirebaseToken, (req,res) => {
 });
 
 //deleting an item
+<<<<<<< HEAD
 app.delete("/delete-item/:name", verifyFirebaseToken, (req, res) => {
     const {name} = req.params;
     fridgeItems = fridgeItems.filter( item => item.name !== name);
+=======
+app.delete("/delete-item/:name", (req, res) => {
+    const {name} = req.params;
+    fridgeItems = fridgeItems.filtetr( item => item.name !== name);
+>>>>>>> d33c3dc (add changes)
     res.json({messgae: "Items deleted!", fridgeItems});
 })
 

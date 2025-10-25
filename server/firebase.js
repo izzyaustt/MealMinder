@@ -10,7 +10,7 @@ const serviceAccount = path.resolve("firebase-service-account.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "your-project-id.appspot.com", // from Step 3
+  storageBucket: process.env.FIREBASE_BUCKET, 
 });
 
 const db = admin.firestore();
