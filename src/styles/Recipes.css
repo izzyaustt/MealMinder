@@ -1,25 +1,321 @@
-.title{
-    color: #856B59;
+
+./* Global Colors */
+:root {
+    --color-primary: #856B59; /* Main Accent Brown for titles/active */
+    --color-secondary: #A0887A; /* Softer Brown/Beige for inactive tabs/borders */
+    --color-background-page: #F3F0F0; /* Cream/Off-White Page Background */
+    --color-card-background: #F3F0F0; /* Very light, warm card background */
 }
 
-.active-content{
-    display: block;
+/* Apply background color to the entire page and center content */
+.recipe-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    min-height: 100vh;
+    background-color: var(--color-background-page);
+    font-family: 'Inter', sans-serif; /* Using a clean, readable font */
 }
 
-.active-tabs{
-    background: white;
-    border-bottom: 1px solid transparent;
+.title {
+    color: var(--color-primary);
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 500;
+    margin-bottom: 0;
 }
 
-.active-tabs::before{
-    content: "";
-    display: block;
+/* --- Tab Container (The main area below the title) --- */
+.tab-container {
+    margin-top: 40px;
+    width: 90%;
+    max-width: 500px; /* Limits the width to match the mobile-friendly image */
+    margin-top: 15px;
+    position: relative; /* Essential for positioning the tabs relative to this box */
+}
+
+/* --- Tab Buttons (Look like tabs floating behind) --- */
+.tab-buttons {
+    display: flex;
     position: absolute;
-    top: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% + 2px);
-    height: 5px;
-    background: blue;
-
+    top: -55px; /* Moves the tabs up above the content box */
+    left: 10px;
+    right: 10px;
+    z-index: 1; /* Tabs are placed just behind the main content box */
 }
+
+.tab-btn {
+    flex-grow: 1;
+    padding: 12px 10px;
+    border: none;
+    background-color: #C9C4C4; /* Beige background for inactive */
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-align: center;
+    border-radius: 10px 10px 0 0; 
+    opacity: 0.7; /* Inactive tab is slightly translucent */
+}
+
+/* Active tab style */
+.tab-btn.active {
+    background-color: #F3F0F0; /* Matches card background */
+    color: var(--color-primary);
+    font-weight: 600;
+    opacity: 1;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05); 
+    /* This border creates the illusion that the tab connects to the content box */
+    border-bottom: 2px solid var(--color-card-background); 
+}
+
+.tab-btn:hover:not(.active) {
+    opacity: 0.9;
+}
+
+/* --- Tab Content Wrapper (The big light, rounded box) --- */
+.tab-content-wrapper {
+    background-color: #F3F0F0; 
+    border-radius: 15px; 
+    padding: 10px;
+    width: 30rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    min-height: 500px;
+    position: relative; 
+    z-index: 10; /* Ensures the content box is layered above the tabs */
+}
+
+/* --- Saved Recipes Content Styling --- */
+
+.recipe-card-box {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #ccc; 
+}
+
+.recipe-card-box:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.recipe-header-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.recipe-title-text {
+    color: var(--color-primary);
+    font-size: 1.3em;
+    font-weight: 700;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.arrow-icon {
+    color: var(--color-primary);
+    font-size: 1.5em;
+    margin-right: 10px;
+    line-height: 1; /* Aligns the arrow properly */
+}
+
+.edit-icon {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.edit-icon:hover {
+    background-color: #f0e6da;
+}
+
+.section-heading {
+    font-weight: 700;
+    font-size: 0.9em;
+    margin: 10px 0 5px 0;
+    color: var(--color-primary);
+}
+
+.recipe-ingredients, 
+.recipe-instructions {
+    margin: 0;
+    padding: 0 0 0 15px;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #5A5A5A;
+}
+
+.recipe-ingredients {
+    list-style-type: none; /* Remove bullets */
+}
+
+/* Use custom list style for the dashes */
+.recipe-ingredients li {
+    text-indent: -15px; 
+    padding-left: 15px;
+}
+.recipe-ingredients li::before {
+    content: "- ";
+}
+.recipe-instructions {
+    padding-left: 0;
+    text-indent: 15px;
+}
+
+/* --- Generator Content Styling --- */
+
+.generator-prompt-heading {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.generator-content textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid var(--color-secondary);
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 1em;
+    background-color: white; 
+}
+
+.generate-button {
+    background-color: var(--color-primary); 
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.2s;
+}
+
+.generate-button:hover:not(:disabled) {
+    background-color: #6d5547;
+}
+
+.generate-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.recipe-output {
+    margin-top: 30px;
+    padding: 0; /* Already padded by .tab-content-wrapper */
+}
+
+.save-button {
+    background-color: #AACEA8;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.save-button:hover {
+    background-color: #8a7366;
+}
+
+
+
+
+/* --- Fridge Inventory Selection Styles --- */
+
+.fridge-inventory-list {
+    /* Style the container for the list of ingredients */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Space between items */
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.fridge-item-label {
+    /* Style each clickable ingredient label */
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px; /* Pill shape */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #f9f9f9;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.fridge-item-label:hover {
+    /* Hover effect */
+    background-color: #eee;
+    border-color: #a0a0a0;
+}
+
+/* Style for selected items */
+.fridge-item-label.selected {
+    background-color: #856B59; /* Your brand/primary color */
+    color: white;
+    border-color: #856B59;
+}
+
+/* Hide the native checkbox, as we use the label for clicking */
+.fridge-item-label input[type="checkbox"] {
+    /* You can make it invisible but still accessible */
+    opacity: 0; 
+    width: 0;
+    height: 0;
+    margin: 0;
+    /* OR, if you want a visible checkbox next to the text: */
+    /* opacity: 1; width: auto; height: auto; margin-right: 8px; */
+}
+
+/* If you chose to keep the checkbox visible, use this: */
+.fridge-item-label input[type="checkbox"] {
+    margin-right: 8px; /* Space between checkbox and text */
+    width: 16px;
+    height: 16px;
+}
+
+.item-quantity {
+    /* Style for the quantity text */
+    margin-left: 8px;
+    font-style: italic;
+    font-size: 0.9em;
+    color: inherit; /* Inherits color from parent label */
+    opacity: 0.8;
+}
+
+/* When selected, make the quantity white/visible */
+.fridge-item-label.selected .item-quantity {
+    color: white;
+}
+
+/* --- Ensure your existing button styles are present for generate-button --- */
+.generate-button {
+    padding: 12px 20px;
+    background-color: #5C7063; /* Example button color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s;
+    width: 100%; /* Full width for prominence */
+}
+
+.generate-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* If you need to make the recipe card look good, ensure you have .recipe-card-box styles too! */
