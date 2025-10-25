@@ -1,4 +1,81 @@
 .title{
     color: #856B59;
+    text-align: center;
 }
 
+input[type="text"] {
+    width: 200px;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #F3F0F0;
+}
+
+.filter-bar{
+    margin: 5%;
+    background-color: #F3F0F0;
+    border-radius: 15px;
+    align-items: center;
+}
+
+.search-bar{
+    align-items: center;
+}
+
+.display-foods{
+    margin: 5%;
+    align-items: center;
+    background-color: #F3F0F0;
+    border-radius: 15px;
+    width: 70vw; /* Sets the width to 80% of the viewport width */
+    height: 60vh;
+}
+
+.item-columns {
+    display: grid;
+    /* Define 3 columns: 
+       1. Name (takes 3 parts of space)
+       2. Quantity (takes 1 part of space, minimum 80px)
+       3. Expiry (takes 1.5 parts of space, centered) */
+    grid-template-columns: 3fr minmax(80px, 1fr) 1.5fr; 
+    align-items: center; /* Vertically center content */
+    gap: 15px; /* Space between columns */
+}
+
+/* General style for columns */
+.item-column {
+    padding: 0 5px;
+    /* Ensure no text wrapping breaks the layout too easily */
+    overflow: hidden; 
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+}
+
+/* Specific alignments for columns */
+.item-name-col strong {
+    font-size: 1.1em;
+}
+
+.item-quantity-col {
+    text-align: center; /* Center the quantity */
+}
+
+.item-expiry-col {
+    text-align: right; /* Align the days remaining to the right */
+    font-weight: 500;
+}
+
+/* Re-apply conditional styles */
+.expiring-soon {
+    /* border-left: 5px solid orange; */
+    color: #DB6365;
+
+}
+
+.expired {
+    color: white;
+    background-color: red;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-block; /* Ensure padding works correctly */
+}

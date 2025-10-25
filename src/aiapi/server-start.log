@@ -1,0 +1,12 @@
+[dotenv@17.2.3] injecting env (2) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+@google/generative-ai version: ^0.24.1
+Using model: models/gemini-2.5-flash
+Model handle methods: []
+GEMINI_KEY_LEN: 39
+Gemini key loaded: Yes
+GEMINI_KEY_LEN: 39
+✅ Backend running on http://localhost:5001
+Incoming: POST /generate-recipes Content-Type: application/json
+Parsed body: [keys]
+Primary SDK generation failed: request is not iterable
+SDK error 'request is not iterable' — likely an SDK call-shape mismatch. Try upgrading @google/generative-ai or adjust call shape.
