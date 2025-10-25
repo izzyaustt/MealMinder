@@ -28,10 +28,13 @@ let fridgeItems = [
   { name: "Bananas", expiration: "2025-10-28" },
 ];
 
+//firebase admin sdk setup
+import serviceAccount from "./firebase-service-account.json" assert { type: "json" };
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     storageBucket: process.env.FIREBASE_BUCKET
+
 });
 
 //middleware to verify firebase token :p
@@ -61,9 +64,11 @@ app.post("/upload", cors(corsOptions), /*verifyFirebaseToken,*/ upload.single("r
     try{
 
         const filePath = req.file.path;
+        console.log("File selected:", filePath);
 
         //calling ocr 
         const extractedLines = await detectText(filePath);
+        console.log("OCR extracted lines:", extractedLines);
 
         //convert lines to items
         const extractedItems = extractedLines.map(line => ({
