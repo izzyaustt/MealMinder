@@ -55,7 +55,10 @@ function Register() {
                 />
                 {errors.password && <span style={{ color: "red" }}>*Password* is mandatory</span>}
 
-                <input type="submit" style={{ backgroundColor: "#AACEA8" }} />
+                <input type="submit" style={{ backgroundColor: "#AACEA8", 
+                        borderRadius: "15px",
+                        display: "block",
+                        margin: "0 auto" }} />
             </form>
         </>
     );

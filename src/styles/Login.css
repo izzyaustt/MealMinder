@@ -5,6 +5,8 @@ body{
     gap: 10px;
     width: 300px;
     margin: 20px auto;
+    align-items: center;
+    justify-content: center;
 }
 
 .header{
@@ -17,8 +19,12 @@ body{
 
 .input-box{
     margin: 5%;
-    border-radius: 3px;
+    border-radius: 15px;
     background-color: #FBF6F6;
+    border: 2px solid #856B59;
+    min-width: 300px;
+    width: 18vw;
+
 }
 
 input{

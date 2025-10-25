@@ -1,16 +1,18 @@
 import { Link } from 'react-router-dom';
 import box from '../images/box.png'; 
+import logo from '../images/mealminder.png';
+import '../App.css'
 
 function Landing() {
   return (
     <header className="App-header">
-      <h1 className="text-center text-amber-700">MealMinder</h1>
-      <p>Eliminate food waste :3</p>
-      <img src={box} alt="box" />
+      <img src={logo} alt="MealMinder" className="logo" />
+      <p>Eliminate food waste</p>
+      <img src={box} alt="box" className="boximg" />
       
       {/* These Link tags allow navigation */}
-      <Link to="/login">I have an account</Link>
-      <Link to="/register">Register</Link>
+      <Link to="/login" className="primary-button">I have an account</Link>
+      <Link to="/register" className="secondary-button">Register</Link>
     </header>
   );
 }

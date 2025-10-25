@@ -1,0 +1,25 @@
+.title{
+    color: #856B59;
+}
+
+.active-content{
+    display: block;
+}
+
+.active-tabs{
+    background: white;
+    border-bottom: 1px solid transparent;
+}
+
+.active-tabs::before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% + 2px);
+    height: 5px;
+    background: blue;
+
+}
