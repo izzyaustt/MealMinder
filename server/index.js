@@ -28,7 +28,7 @@ let fridgeItems = [
 import serviceAccount from "./firebase-key.json" assert { type: "json" };
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount);
+    credential: admin.credential.cert(serviceAccount),
 });
 
 //middleware to verify firebase token :p
