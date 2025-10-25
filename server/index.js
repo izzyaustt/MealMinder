@@ -25,7 +25,19 @@ app.get("/", (req, res) => {
 // upload route
 app.post("/upload", upload.single("receipt"), (req, res) => {
   console.log("uploaded file:", req.file);
-  res.json({ message: "File received!", file: req.file, items: fridgeItems, });
+
+    // MOCK OCR: pretend we extracted these from receipt
+  const extractedItems = [
+    { name: "Cheese", expiration: "2025-11-01" },
+    { name: "Tomatoes", expiration: "2025-10-27" },
+  ];
+
+   fridgeItems.push(...extractedItems);
+
+
+
+
+  res.json({ message: "File received!", file: req.file, extractedItems, fridgeItems, });
 });
 
 app.get("/mock-items", (req,res) => {
@@ -45,8 +57,8 @@ app.post("/add-item", (req,res) => {
 
 //deleting an item
 app.delete("/delete-item/:name", (req, res) => {
-    cost {name} = req.params;
-    fridgeItems = fridgeItems.filtetr( item => item.name !== name);
+    const {name} = req.params;
+    fridgeItems = fridgeItems.filter( item => item.name !== name);
     res.json({messgae: "Items deleted!", fridgeItems});
 })
 
