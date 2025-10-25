@@ -1,11 +1,12 @@
-import React from 'react'
 import '../styles/Fridge.css';
+import Hamburger from '../components/Hamburger.js';
 
 const Fridge = () => {
-  return (
-    <div>
 
-        <h1 className="title text-amber-700">Your Fridge</h1>
+  return (    
+    <div>
+        <Hamburger />
+        <h1 className="title">Your Fridge</h1>
 
         <div className="search-bar">
         </div>
@@ -16,11 +17,6 @@ const Fridge = () => {
 
         <div className="container">
         </div>
-
-        <nav>
-
-        </nav>
-
     </div>
   )
 }
