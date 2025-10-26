@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@react-navigation/bottom-tabs": "^7.5.0",
     "@tailwindcss/vite": "^4.1.16",
-    "@google/generative-ai": "^0.24.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",

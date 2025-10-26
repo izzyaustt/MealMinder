@@ -5,7 +5,7 @@ import icon from '../images/upload.png';
 import Hamburger from '../components/Hamburger.js';
 
 
-function Upload () {
+function Upload2 () {
   const navigate = useNavigate();
   // Removed unused file state variable
   const [message, setMessage] = useState('');
@@ -166,4 +166,4 @@ function Upload () {
 };
 
 
-export default Upload;
+export default Upload2;
