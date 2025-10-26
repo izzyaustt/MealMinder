@@ -4,15 +4,19 @@ import '../styles/Login.css';
 import { useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../Firebase';
+import { useNavigate } from 'react-router-dom';
 
 
-export const Login = async() => {
+export const Login = () => {
   const [validationMessage, setValidationMessage] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  
+
+  const navigate = useNavigate();
 
   const onSubmit = async(data) => {
     //   const userData = JSON.parse(localStorage.getItem(data.email));
@@ -29,6 +33,7 @@ export const Login = async() => {
     if(user) {
         console.log("User logged in successfully:", user.email);
         setValidationMessage("User logged in successfully: " + user.email);
+        navigate("/myfridge");
     } else {
         console.log("Login failed: Invalid email or password");
         setValidationMessage("Login failed: Invalid email or password");

@@ -1,6 +1,8 @@
 import '../styles/Fridge.css';
 import React, { useState, useEffect, useMemo } from 'react';
 import Hamburger from '../components/Hamburger.jsx';
+import { useInventoryData } from '../Frontend/Hooks/useInventoryData.js';
+import { addInventoryItem } from '../Frontend/inventoryApi.js';
 
 const DUMMY_FOOD_DATA = [
   { id: 1, name: 'Milk', quantity: 1, expiryDate: '2025-11-01' },
@@ -10,20 +12,18 @@ const DUMMY_FOOD_DATA = [
 ];
 
 const Fridge = () => {
-
-  const [foodItems, setFoodItems] = useState([]); // All items from the backend
+  const { inventory, userId, isAuthReady } = useInventoryData();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('expiry'); // 'expiry' or 'alphabetical'
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newItem, setNewItem] = useState({
+    name: '',
+    quantity: 1,
+    expiryDate: ''
+  });
 
-  useEffect(() => {
-    // In a real app, you'd fetch data for the logged-in user here
-    // const token = localStorage.getItem('userToken');
-    // fetch('/api/user/fridge', { headers: { 'Authorization': `Bearer ${token}` } })
-    // .then(res => res.json()).then(data => setFoodItems(data));
-
-    // For now, use dummy data
-    setFoodItems(DUMMY_FOOD_DATA);
-  }, []);
+  // Use real Firebase data instead of dummy data
+  const foodItems = inventory;
 
   const calculateDaysRemaining = (expiryDate) => {
     const today = new Date();
@@ -66,13 +66,53 @@ const Fridge = () => {
         setSortBy(event.target.value);
     };
 
+    const handleAddItem = async (e) => {
+        e.preventDefault();
+        if (!userId || !newItem.name || !newItem.expiryDate) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        try {
+            const itemData = {
+                itemName: newItem.name,
+                quantity: parseInt(newItem.quantity),
+                expiryDate: new Date(newItem.expiryDate)
+            };
+            
+            await addInventoryItem(userId, itemData);
+            
+            // Reset form and close modal
+            setNewItem({ name: '', quantity: 1, expiryDate: '' });
+            setShowAddForm(false);
+        } catch (error) {
+            console.error('Error adding item:', error);
+            alert('Failed to add item. Please try again.');
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewItem(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
   return (    
     <div className="fridge-page"> 
         <Hamburger /> 
         <h1 className="title">Your Fridge</h1>
 
         <div className="controls-wrapper"> 
-            
+            <div className="add-item-section">
+                <button 
+                    className="add-item-btn"
+                    onClick={() => setShowAddForm(true)}
+                >
+                    + Add Food Item
+                </button>
+            </div>
 
             <div className="search-bar">
               <input
@@ -131,6 +171,63 @@ const Fridge = () => {
                 <p style={{textAlign: 'center', padding: '20px'}}>No items found. Try uploading a receipt!</p>
             )}
         </div>
+
+        {/* Add Food Item Modal */}
+        {showAddForm && (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <h2>Add Food Item</h2>
+                    <form onSubmit={handleAddItem}>
+                        <div className="form-group">
+                            <label htmlFor="name">Item Name:</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={newItem.name}
+                                onChange={handleInputChange}
+                                required
+                                placeholder="e.g., Milk, Apples, Bread"
+                            />
+                        </div>
+                        
+                        <div className="form-group">
+                            <label htmlFor="quantity">Quantity:</label>
+                            <input
+                                type="number"
+                                id="quantity"
+                                name="quantity"
+                                value={newItem.quantity}
+                                onChange={handleInputChange}
+                                min="1"
+                                required
+                            />
+                        </div>
+                        
+                        <div className="form-group">
+                            <label htmlFor="expiryDate">Expiry Date:</label>
+                            <input
+                                type="date"
+                                id="expiryDate"
+                                name="expiryDate"
+                                value={newItem.expiryDate}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        
+                        <div className="form-actions">
+                            <button type="button" onClick={() => setShowAddForm(false)}>
+                                Cancel
+                            </button>
+                            <button type="submit">
+                                Add Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        )}
     </div>
   );
 }
