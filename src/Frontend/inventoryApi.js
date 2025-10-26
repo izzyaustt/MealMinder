@@ -1,3 +1,5 @@
+//Contains functions for managing data (addDoc, deleteDoc).
+
 import { collection, doc, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { db, appId } from './config';
 

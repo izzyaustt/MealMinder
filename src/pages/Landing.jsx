@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import box from '../images/box.png'; 
 import '../App.css'
 
-function Landing() {
+const Landing = () => {
+  console.log('hi')
   return (
     <header className="App-header">
       <h1 className="title">MealMinder</h1>

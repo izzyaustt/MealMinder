@@ -1,7 +1,9 @@
+//A custom React Hook that handles initial login and sets up the real-time live feed (onSnapshot) for the inventory.
+
 import { useState, useEffect } from 'react';
 import { onAuthStateChanged, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
 import { collection, query, onSnapshot } from 'firebase/firestore';
-import { auth, db, appId, initialAuthToken } from './config';
+import { auth, db, appId, initialAuthToken } from '../config';
 
 /**
  * Custom hook to handle Firebase Auth and fetch real-time inventory data.

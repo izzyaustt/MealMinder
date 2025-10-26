@@ -26,7 +26,6 @@ const HamburgerNav = () => {
         </div>
 
         {isOpen && (
-            // Apply a class for styling (e.g., slide-in sidebar)
             <nav className="sidebar-menu"> 
                 {MENU_ITEMS.map((item) => (
                     // 2. Use the Link component for navigation

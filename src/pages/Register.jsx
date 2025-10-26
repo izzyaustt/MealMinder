@@ -1,4 +1,7 @@
-import React, {useState} from "react";
+import {useState} from "react";
+import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../Firebase.jsx';
 // import { useForm } from "react-hook-form";
 import '../styles/upload.css';
 import girl from '../images/girl1.png'
@@ -9,22 +12,32 @@ const Register = ({onEmailRegister}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (data) => {
-        const existingUser = JSON.parse(localStorage.getItem(email));
-        if (existingUser) {
-            console.log("Email is already registered!");
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // try {
+        //     // Call the shared firebase registration helper
+        //     await registerWithFirebase({ name, email, password });
+
+        //     // If a parent callback was provided also notify it
+        //     if (typeof onEmailRegister === 'function') {
+        //         onEmailRegister({ name, email, password });
+        //     }
+
+        //     console.log(name + ' has been successfully registered in Firebase');
+        //     navigate('/myfridge');
+        // } catch (err) {
+        //     console.error('Registration failed:', err);
+        //     // Show minimal UI feedback for now — replace with nicer UI if you prefer
+        //     alert(err.message || 'Registration failed.');
+        // }
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
+        if(user) {
+            console.log("User registered successfully:", user.email);
+            navigate('/myfridge');
         } else {
-            onEmailRegister({name, email, password});
-            const userData = {
-                name: name,
-                email: email,
-                password: password,
-            };
-            console.log("Before n" + window.location.pathname);
-            window.location.pathname = "/href";
-            console.log("After " + window.location.pathname);
-            localStorage.setItem(email, JSON.stringify(userData));
-            console.log(name + " has been successfully registered");
+            console.log("Registration failed: Invalid email or password");
         }
     };
 

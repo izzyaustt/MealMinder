@@ -1,6 +1,6 @@
 import '../styles/Fridge.css';
 import React, { useState, useEffect, useMemo } from 'react';
-import Hamburger from '../components/Hamburger.js';
+import Hamburger from '../components/Hamburger.jsx';
 
 const DUMMY_FOOD_DATA = [
   { id: 1, name: 'Milk', quantity: 1, expiryDate: '2025-11-01' },
@@ -67,15 +67,13 @@ const Fridge = () => {
     };
 
   return (    
-    // 2. Wrap the entire page content with a class for layout
     <div className="fridge-page"> 
         <Hamburger /> 
         <h1 className="title">Your Fridge</h1>
 
-        {/* 3. Controls Wrapper for side-by-side search/filter */}
         <div className="controls-wrapper"> 
             
-            {/* Search Bar */}
+
             <div className="search-bar">
               <input
                 type="text"
@@ -85,7 +83,6 @@ const Fridge = () => {
               />
             </div>
 
-            {/* Filter Bar */}
             <div className="filter-bar">
               <label htmlFor="sort-select">Sort By:</label>
                 <select id="sort-select" value={sortBy} onChange={handleSortChange}>
@@ -95,7 +92,6 @@ const Fridge = () => {
             </div>
         </div>
       
-        {/* 4. Display Foods Box - This will now be centered by .fridge-page */}
         <div className="display-foods">
             <div className="list-header item-columns">
                 <div className="item-column item-name-col"><strong>Item</strong></div>

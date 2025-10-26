@@ -1,7 +1,6 @@
-import React from 'react';
 import '../styles/upload.css';
 import icon from '../images/upload.png'; 
-import Hamburger from '../components/Hamburger.js';
+import Hamburger from '../components/Hamburger.jsx';
 
 
 function Upload () {

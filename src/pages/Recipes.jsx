@@ -1,6 +1,6 @@
 import '../styles/Recipes.css';
-import React, { useState } from 'react';
-import Hamburger from '../components/Hamburger.js';
+import { useState } from 'react';
+import Hamburger from '../components/Hamburger.jsx';
 
 // Component for the Saved Recipes content
 const SavedRecipesContent = () => (
