@@ -6,13 +6,14 @@
   background-color: #FEF7EA;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* changed from column */
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   font-size: calc(10px + 2vmin);
   color: #856B59;
   position: relative;
   overflow: hidden;
+  padding: 0 5vw; /* adds breathing room on the sides */
 }
 
 /* Animated background gradient overlay */
@@ -105,15 +106,48 @@
   transition: all 0.1s;
 }
 
+.left-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  flex: 1;
+  text-align: left;
+  gap: 1.5vw;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+/* Keep your logo and text centered within the left side */
 .landing-logo {
-  min-width: 30vw;
+  min-width: 50vw;
   max-width: 35vw;
-  display: block;
-  margin-top: -7vw;
-  /*filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));*/
   animation: fadeInDown 0.8s ease-out, float 3s ease-in-out infinite;
   animation-delay: 0s, 0.8s;
+  margin-top: -2vw;
 }
+
+p {
+  margin-top: -12vw;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+  margin-left: 17vw;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 17vw;
+}
+
 
 @keyframes float {
   0%, 100% {
@@ -157,17 +191,7 @@
   }
 }
 
-.boximg {
-  min-width: 30vw;
-  /*filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.2));*/
-  animation: scaleIn 0.8s ease-out 0.3s both;
-  transition: transform 0.3s ease;
-}
-
-.boximg:hover {
-  transform: scale(1.05) rotate(2deg);
-}
-
+/*
 p {
   margin-top: -7vw;
   font-weight: 500;
@@ -176,8 +200,10 @@ p {
   animation: fadeInUp 0.8s ease-out 0.2s both;
   position: relative;
 }
+  */
 
 /* Decorative elements */
+/*
 p::after {
   content: '';
   position: absolute;
@@ -191,6 +217,7 @@ p::after {
   opacity: 0;
   animation: fadeIn 0.8s ease-out 0.4s both;
 }
+*/
 
 @keyframes fadeIn {
   from {
@@ -210,4 +237,42 @@ p::after {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+@keyframes sway {
+  0% {
+    transform: rotate(0deg) translateX(0);
+  }
+  15% {
+    transform: rotate(-5deg) translateX(-5px);
+  }
+  30% {
+    transform: rotate(5deg) translateX(5px);
+  }
+  45% {
+    transform: rotate(-4deg) translateX(-4px);
+  }
+  60% {
+    transform: rotate(4deg) translateX(4px);
+  }
+  75% {
+    transform: rotate(-3deg) translateX(-3px);
+  }
+  90% {
+    transform: rotate(3deg) translateX(3px);
+  }
+  100% {
+    transform: rotate(0deg) translateX(0);
+  }
+}
+
+.boximg {
+  min-width: 40vw;
+  /*filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.2));*/
+  animation: scaleIn 0.8s ease-out 0.3s both, sway 3.5s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.boximg:hover {
+  transform: scale(1.05) rotate(2deg);
 }

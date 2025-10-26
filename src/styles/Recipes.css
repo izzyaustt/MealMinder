@@ -1,25 +1,310 @@
-.title{
-    color: #856B59;
+/* Scoped Recipe styles only - all selectors live under .recipe-page to avoid global leakage */
+
+.recipe-page {
+    /* Scoped color variables */
+    --recipe-color-primary: #856B59;
+    --recipe-color-secondary: #A0887A;
+    --recipe-color-background-page: #FEF7EA;
+    --recipe-color-card-background: #FFF8F2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    min-height: 100vh;
+    background-color: var(--recipe-color-background-page);
+    font-family: 'Inter', sans-serif;
 }
 
-.active-content{
-    display: block;
+/* page-level text */
+.recipe-page p {
+    margin: 0 0 1rem 0;
+    color: #5A5A5A;
+    line-height: 1.45;
+    font-size: 1rem;
 }
 
-.active-tabs{
-    background: white;
-    border-bottom: 1px solid transparent;
+/* title */
+.recipe-page .title {
+    color: var(--recipe-color-primary);
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 500;
+    margin-bottom: 7vw;
 }
 
-.active-tabs::before{
-    content: "";
-    display: block;
+/* Tab container */
+.recipe-page .tab-container {
+    margin-top: 40px;
+    width: 90%;
+    max-width: 500px;
+    margin-top: 15px;
+    position: relative;
+}
+
+/* Tab buttons */
+.recipe-page .tab-buttons {
+    display: flex;
     position: absolute;
-    top: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% + 2px);
-    height: 5px;
-    background: blue;
+    top: -55px;
+    left: 10px;
+    right: 10px;
+    z-index: 1;
+}
 
+.recipe-page .tab-btn {
+    flex-grow: 1;
+    padding: 12px 10px;
+    border: none;
+    background-color: #C9C4C4;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    opacity: 0.7;
+}
+
+.recipe-page .tab-btn.active {
+    background-color: var(--recipe-color-card-background);
+    color: var(--recipe-color-primary);
+    font-weight: 600;
+    opacity: 1;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+    border-bottom: 2px solid var(--recipe-color-card-background);
+}
+
+.recipe-page .tab-btn:hover:not(.active) {
+    opacity: 0.9;
+}
+
+/* Content wrapper */
+.recipe-page .tab-content-wrapper {
+    background-color: var(--recipe-color-card-background);
+    border-radius: 15px;
+    padding: 10px;
+    width: 30rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    min-height: 500px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Saved recipes styling */
+.recipe-page .recipe-card-box {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.recipe-page .recipe-card-box:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.recipe-page .recipe-header-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.recipe-page .recipe-title-text {
+    color: var(--recipe-color-primary);
+    font-size: 1.3em;
+    font-weight: 700;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.recipe-page .arrow-icon {
+    color: var(--recipe-color-primary);
+    font-size: 1.5em;
+    margin-right: 10px;
+    line-height: 1;
+}
+
+.recipe-page .edit-icon {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.recipe-page .edit-icon:hover {
+    background-color: #f0e6da;
+}
+
+.recipe-page .section-heading {
+    font-weight: 700;
+    font-size: 0.9em;
+    margin: 10px 0 5px 0;
+    color: var(--recipe-color-primary);
+}
+
+.recipe-page .recipe-ingredients,
+.recipe-page .recipe-instructions {
+    margin: 0;
+    padding: 0 0 0 15px;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #5A5A5A;
+}
+
+.recipe-page .recipe-ingredients {
+    list-style-type: none;
+}
+
+.recipe-page .recipe-ingredients li {
+    text-indent: -15px;
+    padding-left: 15px;
+}
+.recipe-page .recipe-ingredients li::before {
+    content: "- ";
+}
+.recipe-page .recipe-instructions {
+    padding-left: 0;
+    text-indent: 15px;
+}
+
+/* Generator content */
+.recipe-page .generator-prompt-heading {
+    color: var(--recipe-color-primary);
+    font-weight: 500;
+}
+
+.recipe-page .generator-content textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid var(--recipe-color-secondary);
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 1em;
+    background-color: white;
+}
+
+/* Generate button */
+.recipe-page .generate-button {
+    padding: 12px 20px;
+    background-color: #7da67b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s;
+    width: 100%;
+}
+
+.recipe-page .generate-button:hover:not(:disabled) {
+    background-color: #6d5547;
+}
+
+.recipe-page .generate-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Output & save */
+.recipe-page .recipe-output {
+    margin-top: 30px;
+    padding: 0;
+}
+
+.recipe-page .save-button {
+    background-color: #AACEA8;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.recipe-page .save-button:hover {
+    background-color: #8a7366;
+}
+
+/* Fridge inventory selection */
+.recipe-page .fridge-inventory-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.recipe-page .fridge-item-label {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #f9f9f9;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.recipe-page .fridge-item-label:hover {
+    background-color: #eee;
+    border-color: #a0a0a0;
+}
+
+.recipe-page .fridge-item-label.selected {
+    background-color: var(--recipe-color-primary);
+    color: white;
+    border-color: var(--recipe-color-primary);
+}
+
+.recipe-page .fridge-item-label input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+}
+
+.recipe-page .fridge-item-label input[type="checkbox"] {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+}
+
+.recipe-page .item-quantity {
+    margin-left: 8px;
+    font-style: italic;
+    font-size: 0.9em;
+    color: inherit;
+    opacity: 0.8;
+}
+
+.recipe-page .fridge-item-label.selected .item-quantity {
+    color: white;
+}
+
+
+/* Ensure any other button styles used here are scoped */
+/*
+.recipe-page .generate-button {
+     already defined above; kept for clarity 
+}
+
+ Recipe card presentation safety 
+.recipe-page .recipe-card-box { ensures presence  }
+*/
+
+
+/* Responsive adjustments for the recipe page */
+@media (max-width: 720px) {
+    .recipe-page .tab-content-wrapper { width: 90%; min-height: auto; }
+    .recipe-page .title { font-size: 2em; margin-bottom: 6vw; }
+    .recipe-page .tab-buttons { top: -48px; }
 }

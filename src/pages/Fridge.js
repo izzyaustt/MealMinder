@@ -1,6 +1,7 @@
 import '../styles/Fridge.css';
 import React, { useState, useEffect, useMemo } from 'react';
 import Hamburger from '../components/Hamburger.js';
+import "../styles/Fridge.css";
 
 const DUMMY_FOOD_DATA = [
   { id: 1, name: 'Milk', quantity: 1, expiryDate: '2025-11-01' },
@@ -13,7 +14,7 @@ const Fridge = () => {
 
   const [foodItems, setFoodItems] = useState([]); // All items from the backend
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('expiry'); // 'expiry' or 'alphabetical'
+  const [sortBy, setSortBy] = useState('expiry'); // 'expiry', 'alphabetical', or 'quantity'
 
   useEffect(() => {
     // In a real app, you'd fetch data for the logged-in user here
@@ -47,6 +48,8 @@ const Fridge = () => {
     currentItems.sort((a, b) => {
         if (sortBy === 'alphabetical') {
             return a.name.localeCompare(b.name);
+        } else if (sortBy === 'quantity') {
+            return b.quantity - a.quantity; // Sort descending (highest quantity first)
         }
         // Default and 'expiry' sort
         const daysA = calculateDaysRemaining(a.expiryDate);
@@ -91,6 +94,7 @@ const Fridge = () => {
                 <select id="sort-select" value={sortBy} onChange={handleSortChange}>
                     <option value="expiry">Expiration Date (Soonest First)</option>
                     <option value="alphabetical">Item Name (A-Z)</option>
+                    <option value="quantity">Quantity (Highest First)</option>
                 </select>
             </div>
         </div>

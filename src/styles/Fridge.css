@@ -18,7 +18,10 @@ input[type="text"] {
 }
 
 .search-bar{
+    display: flex;
+    justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .display-foods{
@@ -79,3 +82,211 @@ input[type="text"] {
     font-weight: bold;
     display: inline-block; /* Ensure padding works correctly */
 }
+
+/* Scoped fridge styles to avoid affecting other pages */
+.fridge-page {
+  background-color: #FEF7EA;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;        /* Stack elements vertically */
+  align-items: center;            /* Center horizontally */
+  justify-content: flex-start;    /* Start from top, not center */
+  padding: 2.5rem 1rem;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #3f3f3f;
+}
+
+/* main inner container so content width is constrained and centered */
+.fridge-page .fridge-container {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+/* Page title - specific to fridge */
+.fridge-page .title {
+  color: #856B59;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  margin-bottom: 1rem;            /* Space below title */
+}
+
+/* Filter / search bar area */
+.fridge-page .filter-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFF8F2;
+  border-radius: 12px;
+  padding: 10px;
+  width: 100%;
+  box-shadow: 0 6px 18px rgba(133,107,89,0.06);
+  box-sizing: border-box;
+  margin-bottom: 1rem;            /* Space below filter bar */
+}
+
+/* search input - scoped */
+.fridge-page .filter-bar .search-input,
+.fridge-page input[type="text"].fridge-input {
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(133,107,89,0.12);
+  background-color: #fff;
+  box-sizing: border-box;
+  font-size: 1rem;
+  color: inherit;
+}
+
+/* display area for foods */
+.fridge-page .display-foods {
+  margin: 0 auto;
+  padding: 1rem;
+  align-items: stretch;
+  background-color: #FFF8F2;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 40vh;
+  box-shadow: 0 10px 30px rgba(133,107,89,0.06);
+  box-sizing: border-box;
+}
+
+/* Grid for items - scoped and responsive - KEEP HORIZONTAL */
+.fridge-page .item-columns {
+  display: grid;
+  grid-template-columns: 3fr minmax(80px, 1fr) 1.5fr;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+}
+
+/* Item card row wrapper */
+.fridge-page .item-row {
+  display: contents; /* allow grid children to inherit columns */
+}
+
+/* Column helpers - scoped */
+.fridge-page .item-column {
+  padding: 6px 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* specific column classes */
+.fridge-page .item-name-col strong {
+  font-size: 1.05rem;
+  color: #3f3f3f;
+}
+
+.fridge-page .item-quantity-col {
+  text-align: center;
+  font-weight: 600;
+  color: #4b6b49;
+}
+
+.fridge-page .item-expiry-col {
+  text-align: right;
+  font-weight: 600;
+  color: #856B59;
+}
+
+/* status styles */
+.fridge-page .expiring-soon {
+  color: #DB6365;
+  font-weight: 700;
+}
+
+.fridge-page .expired {
+  color: #fff;
+  background-color: #d9534f;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  display: inline-block;
+}
+
+/* helper for small badges */
+.fridge-page .badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(133,107,89,0.08);
+  color: #856B59;
+  font-size: 0.9rem;
+}
+
+/* ensure checkbox visuals stay scoped */
+.fridge-page .fridge-item-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* quantity smaller helper */
+.fridge-page .item-quantity {
+  margin-left: 8px;
+  font-style: italic;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* responsive adjustments */
+@media (max-width: 900px) {
+  .fridge-page .item-columns {
+    grid-template-columns: 1fr auto;
+    grid-auto-rows: auto;
+  }
+  /* collapse expiry to next row */
+  .fridge-page .item-expiry-col {
+    text-align: left;
+    grid-column: 1 / -1;
+    margin-top: 6px;
+  }
+  .fridge-page .item-quantity-col {
+    text-align: right;
+  }
+}
+
+/* mobile layout: stack items vertically for best readability */
+@media (max-width: 520px) {
+  .fridge-page {
+    padding: 1.25rem;
+  }
+  .fridge-page .filter-bar {
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+  }
+  .fridge-page .display-foods {
+    padding: 12px;
+  }
+  .fridge-page .item-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .fridge-page .item-column { white-space: normal; }
+}
+
+/* small utility: center inline elements inside fridge container */
+.fridge-page .center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ensure no global selectors are present below this line */
