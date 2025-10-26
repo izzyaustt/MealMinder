@@ -1,138 +1,205 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from "fs";
-import fetch from "node-fetch";
-import expiryRouter from '../expiry/index.js';
+// server/aiapi/index.js - Complete API routes
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { extractFoodItems } = require('./geminiExtractor');
+const fs = require('fs').promises;
+const path = require('path');
 
-// Load .env relative to this file
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.join(__dirname, ".env") });
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Use gemini-2.5-flash as the default - it's stable, fast, and widely available
-const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
-const hasGeminiKey = Boolean(process.env.GEMINI_API_KEY);
-
-console.log("GEMINI_KEY_LEN:", process.env.GEMINI_API_KEY?.trim().length || 0);
-console.log("Using model:", modelName);
-
-// Test route
-app.get("/", (req, res) => res.send("✅ Backend is live!"));
-
-// Body logging middleware
-app.use((req, res, next) => {
-  console.log("Incoming:", req.method, req.url, "Content-Type:", req.headers["content-type"]);
-  try {
-    console.log("Parsed body:", req.body && (Array.isArray(req.body) ? `array(${req.body.length})` : Object.keys(req.body).length ? "[keys]" : "{}"));
-  } catch {}
-  next();
+// Configure multer for file uploads
+const upload = multer({ 
+  dest: 'uploads/',
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
 
-// Generate recipes route using REST directly
-app.post("/generate-recipes", async (req, res) => {
+/**
+ * Extract text from receipt image using Google Vision API
+ */
+async function extractTextFromImage(imagePath) {
   try {
-    let items;
-    const body = req.body;
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    if (!body) items = undefined;
-    else if (Array.isArray(body.items)) items = body.items;
-    else if (body.items && typeof body.items === "string") {
-      try {
-        const parsed = JSON.parse(body.items);
-        items = Array.isArray(parsed) ? parsed : [parsed];
-      } catch {
-        items = body.items.split(",").map(s => s.trim()).filter(Boolean);
+    // Read image file
+    const imageData = await fs.readFile(imagePath);
+    const base64Image = imageData.toString('base64');
+
+    const prompt = `
+Extract ALL text from this receipt image. Return the data as a JSON array where each line item is an object with:
+- "name": the text/item name
+- "purchased": today's date in format "YYYY-MM-DD"
+
+Include everything visible: dates, items, prices, totals, etc.
+Return ONLY valid JSON, no additional text.
+`;
+
+    const result = await model.generateContent([
+      prompt,
+      {
+        inlineData: {
+          data: base64Image,
+          mimeType: "image/jpeg"
+        }
       }
-    } else items = body.items;
+    ]);
 
-    if (!items || !items.length) {
+    const response = await result.response;
+    let responseText = response.text().trim();
+
+    // Clean up markdown code blocks
+    if (responseText.startsWith('```')) {
+      const parts = responseText.split('```');
+      responseText = parts[1] || parts[0];
+      responseText = responseText.replace(/^json\s*/i, '').trim();
+    }
+
+    const extractedData = JSON.parse(responseText);
+    return extractedData;
+
+  } catch (error) {
+    console.error("Error extracting text from image:", error);
+    throw error;
+  }
+}
+
+/**
+ * POST /api/process-receipt
+ * Complete flow: Upload image → Extract text → Extract food items
+ * 
+ * Expects: multipart/form-data with 'receipt' file
+ * Returns: { success, receiptData, foodItems }
+ */
+router.post('/process-receipt', upload.single('receipt'), async (req, res) => {
+  let filePath = null;
+
+  try {
+    if (!req.file) {
       return res.status(400).json({
-        error: "No items provided",
-        hint: 'Send JSON with Content-Type: application/json and a top-level items array, e.g. {"items":["milk","eggs"]}',
+        success: false,
+        error: 'No receipt image uploaded'
       });
     }
 
-    const prompt = `You are a cooking assistant helping people reduce food waste. Suggest 3 simple recipes using these ingredients: ${items.join(", ")}. For each recipe, include:
-- Recipe title
-- List of ingredients needed
-- Step-by-step instructions
-- Disclaimer: Try maximizing the items in the list but avoid creating odd recipes like banana and onion milkshake. If this happens, make one recipe for the onion stuff and one recipe for banana stuff. This is just an example.
-- Don't add any extra sentences in the beginning, only print out the 3 recipes with steps/ingredients. 
-- Still keep it very user friendly and nice to read/look at. 
+    filePath = req.file.path;
 
-Keep recipes simple and practical.`;
+    // Step 1: Extract text from image
+    console.log('Step 1: Extracting text from receipt image...');
+    const receiptData = await extractTextFromImage(filePath);
 
-    // Fallback if API key missing
-    if (!hasGeminiKey) {
-      const fallback = items.map((it, i) => `${i + 1}. Quick ${it} dish:\nIngredients: ${it}\nSteps: Mix and cook.`).join("\n\n");
-      return res.json({ recipes: `FALLBACK (no GEMINI_API_KEY):\n\n${fallback}` });
-    }
+    // Step 2: Extract food items from receipt data
+    console.log('Step 2: Extracting food items...');
+    const foodItems = await extractFoodItems(receiptData);
 
-    // Fixed REST call to Gemini API
-    // Try v1beta with generateContent - this works for most API keys
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${process.env.GEMINI_API_KEY}`;
-    
-    const requestBody = {
-      contents: [{
-        parts: [{
-          text: prompt
-        }]
-      }]
-    };
+    // Clean up uploaded file
+    await fs.unlink(filePath);
 
-    console.log("Calling Gemini API...");
-    const r = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestBody),
+    return res.status(200).json({
+      success: true,
+      receiptData: receiptData,
+      foodItems: foodItems,
+      totalItems: foodItems.length
     });
 
-    const responseText = await r.text();
-    console.log("Response status:", r.status);
-    console.log("Response text:", responseText.substring(0, 200));
-
-    let data;
-    try {
-      data = JSON.parse(responseText);
-    } catch (parseError) {
-      console.error("Failed to parse response:", parseError);
-      return res.status(500).json({ 
-        error: "Failed to parse Gemini response", 
-        details: responseText.substring(0, 500) 
-      });
-    }
-
-    if (!r.ok) {
-      console.error("Gemini REST error:", JSON.stringify(data));
-      return res.status(500).json({ error: "Failed to generate recipes", details: data });
-    }
-
-    // Extract text from response - fixed path
-    let recipes = "No recipes generated";
-    if (data?.candidates && data.candidates.length > 0) {
-      const candidate = data.candidates[0];
-      if (candidate?.content?.parts && candidate.content.parts.length > 0) {
-        recipes = candidate.content.parts[0].text;
+  } catch (error) {
+    console.error('Error processing receipt:', error);
+    
+    // Clean up file if it exists
+    if (filePath) {
+      try {
+        await fs.unlink(filePath);
+      } catch (unlinkError) {
+        console.error('Error deleting file:', unlinkError);
       }
     }
 
-    res.json({ recipes });
-  } catch (error) {
-    console.error("Error in /generate-recipes:", error?.message || error, error?.stack || "");
-    res.status(500).json({ error: "Failed to generate recipes", details: error?.message || String(error) });
+    return res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to process receipt'
+    });
   }
 });
 
-app.use('/expiry', expiryRouter);
+/**
+ * POST /api/extract-food
+ * Extract food items from already-extracted receipt data
+ * 
+ * Request body: { receiptData: [...] }
+ */
+router.post('/extract-food', async (req, res) => {
+  try {
+    const { receiptData } = req.body;
 
-// Start server
-const PORT = 5001;
-app.listen(PORT, () => console.log(`✅ Backend running on http://localhost:${PORT}`));
+    if (!receiptData) {
+      return res.status(400).json({
+        success: false,
+        error: 'Receipt data is required'
+      });
+    }
+
+    const foodItems = await extractFoodItems(receiptData);
+
+    return res.status(200).json({
+      success: true,
+      data: foodItems,
+      count: foodItems.length
+    });
+
+  } catch (error) {
+    console.error('Error in extract-food endpoint:', error);
+    return res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to extract food items'
+    });
+  }
+});
+
+/**
+ * POST /api/extract-text
+ * Extract text from receipt image only
+ * 
+ * Expects: multipart/form-data with 'receipt' file
+ */
+router.post('/extract-text', upload.single('receipt'), async (req, res) => {
+  let filePath = null;
+
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: 'No receipt image uploaded'
+      });
+    }
+
+    filePath = req.file.path;
+
+    const receiptData = await extractTextFromImage(filePath);
+
+    // Clean up uploaded file
+    await fs.unlink(filePath);
+
+    return res.status(200).json({
+      success: true,
+      data: receiptData,
+      count: receiptData.length
+    });
+
+  } catch (error) {
+    console.error('Error extracting text:', error);
+    
+    if (filePath) {
+      try {
+        await fs.unlink(filePath);
+      } catch (unlinkError) {
+        console.error('Error deleting file:', unlinkError);
+      }
+    }
+
+    return res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to extract text from receipt'
+    });
+  }
+});
+
+module.exports = router;

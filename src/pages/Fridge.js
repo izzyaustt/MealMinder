@@ -16,13 +16,17 @@ const Fridge = () => {
   const [sortBy, setSortBy] = useState('expiry'); // 'expiry' or 'alphabetical'
 
   useEffect(() => {
-    // In a real app, you'd fetch data for the logged-in user here
-    // const token = localStorage.getItem('userToken');
-    // fetch('/api/user/fridge', { headers: { 'Authorization': `Bearer ${token}` } })
-    // .then(res => res.json()).then(data => setFoodItems(data));
-
-    // For now, use dummy data
-    setFoodItems(DUMMY_FOOD_DATA);
+    // Check localStorage for saved items first, then fall back to dummy data
+    const savedItems = JSON.parse(localStorage.getItem('fridgeItems') || '[]');
+    
+    console.log('Loading fridge items:', { savedItems: savedItems.length, dummyData: DUMMY_FOOD_DATA.length });
+    
+    if (savedItems.length > 0) {
+      setFoodItems(savedItems);
+    } else {
+      // Use dummy data if no saved items
+      setFoodItems(DUMMY_FOOD_DATA);
+    }
   }, []);
 
   const calculateDaysRemaining = (expiryDate) => {
@@ -34,6 +38,7 @@ const Fridge = () => {
   };
 
   const filteredAndSortedItems = useMemo(() => {
+    console.log('Filtering items:', { foodItems: foodItems.length, searchTerm, sortBy });
     let currentItems = [...foodItems];
 
     // Apply Search Filter
@@ -41,6 +46,7 @@ const Fridge = () => {
         currentItems = currentItems.filter(item =>
             item.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
+        console.log('After search filter:', currentItems.length, 'items');
     }
 
     // Apply Sorting
@@ -54,15 +60,18 @@ const Fridge = () => {
         return daysA - daysB; // Sort ascending (closest to expiry first)
     });
 
+    console.log('Final filtered items:', currentItems.length);
     return currentItems;
   }, [foodItems, searchTerm, sortBy]);
 
   // 5. Handlers
     const handleSearchChange = (event) => {
+        console.log('Search term changed:', event.target.value);
         setSearchTerm(event.target.value);
     };
 
     const handleSortChange = (event) => {
+        console.log('Sort changed:', event.target.value);
         setSortBy(event.target.value);
     };
 

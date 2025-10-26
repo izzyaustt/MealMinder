@@ -2,6 +2,7 @@
   "name": "mealminder",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@react-navigation/bottom-tabs": "^7.5.0",
     "@tailwindcss/vite": "^4.1.16",
@@ -11,6 +12,7 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^12.4.0",
+    "firebase-admin": "^11.5.0",
     "hamburger-react": "^2.5.2",
     "node-fetch": "^3.3.2",
     "react": "^19.2.0",

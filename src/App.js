@@ -1,11 +1,12 @@
 import './styles/Login.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Register from './pages/Register'
-import Login from './pages/Login'
-import Landing from './pages/Landing'
-import Fridge from './pages/Fridge'
-import Upload from './pages/Upload'
+import Register from './pages/Register.js'
+import Login from './pages/Login.js'
+import Landing from './pages/Landing.js'
+import Fridge from './pages/Fridge.js'
+import Upload from './pages/Upload.js'
 import Recipes from './pages/Recipes.js'
+import Test from './pages/Upload2.js'
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/myfridge" element={<Fridge />} />
             <Route path="/upload" element={<Upload />} />
+            <Route path="/test" element={<Test />} />
             <Route path="/recipes" element={<Recipes />} />
           </Routes>
       </div>

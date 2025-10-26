@@ -3,51 +3,103 @@
     text-align: center;
 }
 
+/* Controls wrapper for side-by-side search and sort */
+.controls-wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 10;
+}
+
 input[type="text"] {
-    width: 200px;
+    width: 300px;
     padding: 10px;
     border-radius: 15px;
     background-color: #F3F0F0;
+    border: 1px solid #ddd;
+    z-index: 10;
+    position: relative;
 }
 
 .filter-bar{
-    margin: 5%;
     background-color: #F3F0F0;
     border-radius: 15px;
     align-items: center;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 10;
+}
+
+.filter-bar label {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.filter-bar select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 14px;
+    z-index: 10;
+    position: relative;
 }
 
 .search-bar{
     align-items: center;
+    display: flex;
+    position: relative;
+    z-index: 10;
 }
 
 .display-foods{
-    margin: 5%;
+    margin: 5% auto;
     align-items: center;
     background-color: #F3F0F0;
     border-radius: 15px;
-    width: 70vw; /* Sets the width to 80% of the viewport width */
-    height: 60vh;
+    width: 90vw; /* Increased width to 90% of viewport */
+    max-width: 1200px; /* Maximum width for very large screens */
+    height: 70vh; /* Increased height */
+    overflow-y: auto; /* Add vertical scrolling */
+    padding: 20px; /* Add padding inside the container */
 }
 
 .item-columns {
     display: grid;
     /* Define 3 columns: 
-       1. Name (takes 3 parts of space)
-       2. Quantity (takes 1 part of space, minimum 80px)
-       3. Expiry (takes 1.5 parts of space, centered) */
-    grid-template-columns: 3fr minmax(80px, 1fr) 1.5fr; 
+       1. Name (takes 4 parts of space)
+       2. Quantity (takes 1 part of space, minimum 100px)
+       3. Expiry (takes 2 parts of space, centered) */
+    grid-template-columns: 4fr minmax(100px, 1fr) 2fr; 
     align-items: center; /* Vertically center content */
-    gap: 15px; /* Space between columns */
+    gap: 20px; /* Increased space between columns */
+    padding: 15px 10px; /* Add padding to each row */
+    border-bottom: 1px solid #ddd; /* Add subtle border between rows */
 }
 
 /* General style for columns */
 .item-column {
-    padding: 0 5px;
-    /* Ensure no text wrapping breaks the layout too easily */
+    padding: 0 10px;
+    /* Better text handling */
     overflow: hidden; 
-    white-space: nowrap;
-    text-overflow: ellipsis; 
+    word-wrap: break-word;
+    hyphens: auto;
+    line-height: 1.4;
+}
+
+/* Header row styling */
+.item-columns:first-child {
+    background-color: #e0e0e0;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 10px;
 }
 
 /* Specific alignments for columns */
@@ -78,4 +130,23 @@ input[type="text"] {
     border-radius: 4px;
     font-weight: bold;
     display: inline-block; /* Ensure padding works correctly */
+}
+
+/* Custom scrollbar styling */
+.display-foods::-webkit-scrollbar {
+    width: 8px;
+}
+
+.display-foods::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.display-foods::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.display-foods::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

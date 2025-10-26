@@ -31,7 +31,7 @@ function Upload () {
 
         <input
             type="file"
-            className="file-input"
+            // className="file-input"
             onChange={handleFileUpload}
         />
       </div>
