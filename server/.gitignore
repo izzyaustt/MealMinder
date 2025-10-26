@@ -2,3 +2,5 @@ node_modules/
 uploads/
 .env
 firebase-key.json
+firebase-service-account.json
+ocr-project.json
